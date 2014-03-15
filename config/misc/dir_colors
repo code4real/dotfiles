@@ -1,0 +1,308 @@
+# .dircolors
+#
+# Configure your console file colors.
+#
+# Author: Micah Elliott http://MicahElliott.com
+#
+# This file should sit in your $HOME as .dircolors or .dir_colors,
+# depending on your distro.
+#
+# Configuration file for dircolors, a utility to help you set the
+# LS_COLORS environment variable used by GNU ls with the --color option.
+#
+# IT APPEARS SUSE DOES NOT RESPECT THIS
+#
+# The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
+# slackware version of dircolors) are recognized but ignored.
+
+# Below, there should be one TERM entry for each termtype that is colorizable
+TERM linux
+TERM linux-c
+TERM mach-color
+TERM console
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM xterm
+TERM xterm-debian
+TERM rxvt
+TERM screen
+TERM screen-w
+TERM vt100
+
+# Below are the color init strings for the basic file types. A color init
+# string consists of one or more of the following numeric codes:
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+NORMAL 00	# global default, although everything should be something.
+FILE 00 	# normal file
+DIR 01;34 	# directory
+LINK 01;36 	# symbolic link.  (If you set this to 'target' instead of a
+           	# numerical value, the color is as for the file pointed to.)
+FIFO 40;33	# pipe
+SOCK 01;35	# socket
+DOOR 01;35	# door
+BLK 40;33;01	# block device driver
+CHR 40;33;01 	# character device driver
+ORPHAN 40;31;01 # symlink to nonexistent file
+
+# This is for files with execute permission:
+#EXEC 01;32  # Don't use bright green with brown background!
+
+# TEST_MARKER
+
+# List any file extensions like '.gz' or '.tar' that you would like ls
+# to colorize below. Put the extension, a space, and the color init string.
+# (and any comments you want to add after a '#')
+
+# Archives, compressed, data
+.tar  1;38;5;244
+.tgz  1;38;5;244
+.arj  1;38;5;244
+.taz  1;38;5;244
+.lzh  1;38;5;244
+.zip  1;38;5;244
+.rar  1;38;5;244
+.z    1;38;5;244
+.Z    1;38;5;244
+.gz   1;38;5;244
+.bz2  1;38;5;244
+.deb  1;38;5;244
+.rpm  1;38;5;244
+.jar  1;38;5;244
+.bson 1;38;5;244
+
+# Image formats; use flickr logo.
+.jpg 38;5;89
+.png 38;5;89
+.gif 38;5;89
+.bmp 38;5;89
+.ppm 38;5;89
+.tga 38;5;89
+.xbm 38;5;89
+.xpm 38;5;89
+.tif 38;5;89
+.fli 38;5;89
+.gl  38;5;89
+.dl  38;5;89
+.svg 38;5;89
+.ico 38;5;89
+.xcf 38;5;89
+
+# Audio/video; use vimeo logo color.
+.mpg  38;5;38
+.avi  38;5;38
+.mp3  38;5;38
+.mp4  38;5;38
+.mov  38;5;38
+.ogg  38;5;38
+.ogv  38;5;38
+.mkv  38;5;38
+.mpeg 38;5;38
+.webm 38;5;38
+.ogv  38;5;38
+
+# C/C++ programming; color of CPL cover.
+.cpp  38;5;185
+.cxx  38;5;185
+.C    38;5;185
+.cc   38;5;185
+.c    38;5;185
+.pgc  38;5;185
+.pgcc 38;5;185
+.i    38;5;185
+.ii   38;5;185
+.h    38;5;185
+.hxx  38;5;185
+.H    38;5;185
+.hh   38;5;185
+.inc  38;5;185
+.hpp  38;5;185
+.esqlc 38;5;185
+
+*tags 1;42
+
+# Lex/Yacc
+.l   ;35
+.ll  ;35
+.y  0;35
+.yy 0;35
+
+# Fortran
+.f   0;35
+.F   0;35
+.for 0;35
+.FOR 0;35
+.f90 0;35
+.F90 0;35
+.ftn 0;35
+.FTN 0;35
+.fpp 0;35
+.FPP 0;35
+
+# Common programming languages
+.java  0;35
+.pl    0;35
+.pm    0;35
+.rb   38;5;85
+.ru   38;5;85
+.hs    0;35
+.lhs   0;35
+
+# Clojure
+.clj  38;5;117
+.cljs 38;5;117
+
+# wxPython logo green.
+.py 38;5;22
+
+# JavaScript (jquery site highlight color), CoffeeScript (brown)
+.js     38;5;97
+.json   38;5;97
+.cs     38;5;94
+.coffee 38;5;94
+.cf     38;5;94
+.co     38;5;94
+.cson   38;5;94
+.ls     38;5;94
+
+# SQL
+.sql 0;35
+
+# Vim logo
+.vim 38;5;29
+
+# Shell
+.zsh    38;5;226
+.sh     0;33
+.rc     0;33
+.bash   0;33
+.ksh    0;33
+.tcsh   0;33
+.csh    0;33
+.s      0;33
+.t      0;33
+
+# XML/description
+.html 38;5;112
+.jade 38;5;112
+.xml  38;5;112
+.haml 38;5;112
+.erb  38;5;112
+.xml  38;5;112
+.xslt 38;5;112
+.tmpl 38;5;112
+.tpl  38;5;112
+.mail 38;5;112
+
+.css 38;5;177
+.less 38;5;177
+.styl 38;5;177
+.sass 38;5;177
+.scss 38;5;177
+
+.ini    38;5;179
+.conf   38;5;179
+.config 38;5;179
+.cfg    38;5;179
+.yml    38;5;179
+.yaml   38;5;179
+.lst    38;5;179
+.clst   48;5;179
+
+# Build
+*Rakefile     38;5;100
+*Thorfile     38;5;100
+*Capfile      38;5;100
+*Gemfile      38;5;100
+*Gemfile.lock 38;5;100
+*Guardfile    38;5;100
+.rake         38;5;100
+*Makefile     38;5;100
+*makefile     38;5;100
+.mk           38;5;100
+.gmk          38;5;100
+*Makefile.PL  38;5;100
+*Build.PL     38;5;100
+
+# Unimportant, nearly hidden.
+.o     38;5;236
+.class 38;5;236
+.pyc   38;5;236
+.pyo   38;5;236
+.mod   38;5;236
+.hsc   38;5;236
+.swp   38;5;236
+.swo   38;5;236
+.lock  38;5;236
+*transtmp*  38;5;236
+
+# Stand out!
+.err   1;42
+*bug   0;41
+*fix   0;44
+*core  1;41
+
+# Informational
+*log        1;33
+*report     1;33
+*.res       1;33
+*.df        1;33
+.gitignore  1;33
+.gitkeep    1;33
+.gitmodules 1;33
+.rvmrc      1;33
+.ruby-version   1;33
+.rbenv-version  1;33
+.rbenv-gemsets  1;33
+
+# Documentation
+*README   38;5;172
+*INSTALL  38;5;172
+*LICENSE  38;5;172
+.mkd      38;5;172
+.md       38;5;172
+.markdown 38;5;172
+.asciidoc 38;5;172
+.ronn     38;5;172
+.txt      38;5;172
+.tex      38;5;172
+.moin     38;5;172
+.rst      38;5;172
+.rdoc     38;5;172
+
+# Binaryish
+.doc      38;5;212
+.docx     38;5;212
+.ods      38;5;212
+.odt      38;5;212
+.pdf      38;5;212
+.woff     38;5;212
+
+# Spreadsheets
+.csv      38;5;50
+.tsv      38;5;50
+.xls      38;5;50
+.xlsx     38;5;50
+.gnumeric 38;5;50
+.dot      38;5;50
+
+
+# Language
+.eo 38;5;255;0;48;5;34
+.feature 38;5;255;0;48;5;34
+#*_spec.rb 38;5;255;0;48;5;124
+*_spec.rb 38;5;14
+
+EXEC 01

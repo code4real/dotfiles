@@ -1,0 +1,61 @@
+######################################################################
+# .zshrc
+######################################################################
+
+# Two reasons for splitting into files, instead of big unified .zshrc:
+#
+# 1. Can separate different things for different shells (zsh, bash)
+#
+# 2. Can have a “reload” util that just re`source`s a subset of the files.
+#
+# Using perlesque convention that ‘my_*’ vars are globally visible things that
+# I have set.
+#
+# Noticed that archlinux et al do the same type of `source`ing of worker
+# scripts in /etc/profile and /etc/profile.d/
+
+# Timing
+##zmodload zsh/zprof
+
+# Specifics for user, to set subsequent envars
+my_fname=cody
+my_lname=pythagoras
+my_email='cody@example.com'
+my_fullname='Cody Pythagoras'
+
+my_shdir=~/config/zsh
+
+# This order can be important. Nice to have all the envars
+# set so subsequent functions etc can make use of them.
+my_configs=(
+    envars.zsh
+    options.zsh # potential to be slow
+    aliases.zsh
+    functions.zsh
+)
+
+# Always time the stuff.
+integer t0=$(date '+%s')
+
+# Source all the Zsh-specific and sh-generic files.
+for f in $my_configs; do
+    [[ -f $my_shdir/$f ]] && . $my_shdir/$f
+done
+unset f
+
+# Site-specific
+_siterc="$my_shdir/$(hostname -s).sh"
+[[ -f $_siterc ]] && . $_siterc || :
+unset _siterc
+
+function {
+    local -i t1 startup
+    t1=$(date '+%s')
+    startup=$(( t1 - t0 ))
+    [[ $startup -gt 1 ]] && print "Hmm, poor shell startup time: $startup"
+    ##print "startup time: $startup"
+}
+unset t0
+
+# Timing
+##zprof

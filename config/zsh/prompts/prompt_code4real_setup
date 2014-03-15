@@ -1,0 +1,16 @@
+prompt_code4real_help() {
+  cat <<'EOF'
+Simply features error codes, pwd, and nothing else!
+For many others, see shared themes: https://github.com/robbyrussell/oh-my-zsh/wiki/themes
+EOF
+}
+
+prompt_code4real_setup() {
+  RPROMPT='%K{226}%F{black} %n %f%k'
+  PROMPT='%F{red}%B%S%(?..[%?]%s )%b%f%S%s%K{255}%F{blue}%B%~%f %F{231}%%%f%k%b '
+  prompt_opts=(cr percent)
+}
+
+prompt_code4real_setup "$@"
+
+# vim:ft=zsh:

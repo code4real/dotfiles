@@ -1,0 +1,29 @@
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	di = diff
+	lo = log
+[color]
+	diff = auto
+	grep = auto
+	branch = auto
+	interactive = auto
+	status = auto
+	ui = auto
+[user]
+	name = Cody Mandelbrot
+	email = cody@example.com
+[color "status"]
+	added = blue
+	untracked = green
+[core]
+	excludesfile = ~/.gitignore
+[gui]
+	recentrepo = /tmp/foo
+[giggle]
+	main-window-maximized = false
+	main-window-geometry = 1297x907+162+1240
+	history-view-vpane-position = 581
+	main-window-view = HistoryView
+	file-view-vpane-position = 404

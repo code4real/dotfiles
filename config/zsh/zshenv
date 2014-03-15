@@ -1,0 +1,5 @@
+# .zshenv — things that will be set even in non-interactive shells (scripts)
+
+#foo=42
+
+#setopt braceccl rematchpcre shortloops errexit
