@@ -71,8 +71,8 @@ print "https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/highligh
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets pattern )
 # Hmm, just basic colors? rgybmc
 #ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=cyan
-#ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=white,standout
-#ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=yellow
+#ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=cyan,bold
+#ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=white,standout
 #ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
 #ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=magenta
 #ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=cyan
@@ -92,7 +92,7 @@ autoload -Uz colors; colors
 # Set prompt to random color.
 #prompt balance $(( $RANDOM % 9 ))
 #prompt balance black
-prompt cliguy
+prompt code4real
 #prompt wunjo
 #prompt off
 
@@ -243,6 +243,10 @@ typeset -ga precmd_functions
 SAVEHIST=10000
 HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
+
+# Stop Esc-* from acting like Alt-*, and save time!
+# http://www.johnhawthorn.com/2012/09/vi-escape-delays/
+KEYTIMEOUT=1
 
 # Consider MIME filetype enabling. SLOW!
 # http://www.bash2zsh.com/essays/essay1_file_manager.html

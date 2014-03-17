@@ -33,7 +33,8 @@ alias h=run-help
 # J -- job control
 alias j='jobs'
 # L -- dir listing
-alias l='ls -hlABFX'
+#alias l='ls -hlABFX'
+alias l='ls -hlABF'
 # M -- audio player
 alias m=$APLAYER
 # N -- nautilus
