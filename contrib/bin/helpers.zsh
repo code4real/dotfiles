@@ -40,3 +40,14 @@ requires() {
     hash $req 2>/dev/null || err "missing requirement: $req"
   done
 }
+
+### Platform
+os=$(uname -o)
+if [[ $os == Linux ]]; then
+  print ""
+  my_os=linux
+elif [[ $os == FreeBSD || $os == Darwin ]]; then
+  my_os=bsd
+else
+  my_os=unsupported
+fi
