@@ -1,5 +1,6 @@
 # Dotfiles: reusable and customizable
-Config and mini-scripts tuned for vim, zsh, i3, urxvt, repls, etc
+Config and mini-scripts tuned for vim, zsh, i3, urxvt, repls, etc on various
+operating system families/distros: bsd, linux, mac.
 
 Most interesting areas:
 
@@ -21,14 +22,44 @@ Notable features:
 
 * Time-able and fast
 
+## Installs
+(Should really be a single, OS-flexible bootstrap script.)
+
+### PC-BSD
+
+Essential:
+    pkg install coreutils zsh gawk i3 rxvt-unicode tmux vim
+
+Niceties:
+    pkg install chromium firefox lxappearance openjdk
+
+## Arch Linux
+    yaourt -S zsh i3 i3status rxvt-unicode tmux vim
+
+## Fedora/CentOS
+    yum install -y 
+
+## Debian/Ubuntu
+
 ## Setup
 
-1. Ensure some important things are installed: zsh, vim, git
+1. Create a new user account if you don't already have one, or if want to try
+   a fresh start. As a root/admin user, run:
 
-1. Create a new user account if you don't already have one, or want to try a
-   fresh start.
+        useradd -s /usr/bin/zsh -m YOUR_USERNAME
 
-        sudo useradd -s /usr/bin/zsh -m YOUR_USERNAME
+        # Or, for mac:
+        ./useradd-mac.sh YOUR_USERNAME
+
+1. Enable `sudo` on your account. Hopefully, it's already done; try this:
+        sudo ls
+
+1. Download the bootstrapping script:
+
+1. Run the bootstrapping script to install some essential packages, clone the
+   repo, and put the dotfiles into place.
+
+        ./bootstrap.sh
 
 1. Move your own config files temporarily into a scratch area for later
    reference.
@@ -46,7 +77,7 @@ Notable features:
 1. Clone and set up for repo.
 
         git clone git@github.com:YOUR_USERNAME/dotfiles.git ~/.dotfiles.git
-        mv .dotfiles.git/.* .dotfiles.git/*
+        mv .dotfiles.git/.* .dotfiles.git/* .
         mv .git .dotfiles.git/
 
 1. Try it out! (lots of `dotfiles` aliases, like `dst`, `dci`, etc)
@@ -101,3 +132,34 @@ your gists.
     Key:  * = $HOME-VCS-managed;         ^ = symlink-mirrored, not suited for VCS;
           + = individually VCS-managed;  ! = lose-able;
           & = used by system
+
+## FAQs
+
+**Which OSs can I use with code4real?**
+
+Most Linux distro families are supported/tested: Arch, Debian (and Ubuntu, etc),
+Red Hat (centos, fedora). FreeBSD and derivatives (PC-BSD) also works.
+
+You can even use a Mac, though I encourage you to try out another more open
+system. There are several easy and free ways (VirtualBox or USB-stick image)
+to try out Linux or BSD.
+
+**Which OS do you recommend?**
+
+Prefer any OS that is as "open" as possible.
+
+We presently use *Arch Linux* more than the others. It's very convenient to
+have a rolling release, and the *yaourt* package manager makes for a very
+strong means to share projects. Linux runs just about everywhere, so it's a
+great choice if you're worried about hardware support.
+
+*PC-BSD* is a really friendly OS to install, and pkgng makes installing packages
+really easy. It's also an extension to the very robust FreeBSD, which is a
+high performing server supporting ZFS and sophisticated system debugging via
+DTrace.
+
+**I prefer the FOO tool over the one you've selected.**
+
+This setup can be customized to your liking. Feel free to use Emacs instead of
+Vim, for example. But many of the tutorials that are part of code4real will be
+featuring the supported tools that are included.
