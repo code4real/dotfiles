@@ -48,6 +48,9 @@ z
 # Dot *files*
 .*_history
 .*.history
+.histfile
+.history
+.zhistory
 .*.log
 .conkyrc1
 .*_auth
@@ -80,6 +83,28 @@ z
 .s3cfg
 .netrc
 .msmtprc
+.cshrc
+.appcafeprefs
+.ideskrc
+.lastlogin
+.login
+.login_conf
+.mail_aliases
+.mailrc
+.mounttray.settings
+.pcdmsessionstart
+.profile
+.ratpoisonrc
+.rhosts
+.screenrc
+.shrc
+.xprofile
+.xscreensaver
+Documents
+GNUstep
+Images
+fontconfig
+
 
 # Dot *dirs*
 .*/
