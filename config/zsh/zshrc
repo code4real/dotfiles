@@ -25,6 +25,16 @@ my_fullname='Cody Pythagoras'
 
 my_shdir=~/config/zsh
 
+# Distro too tedious to infer reliably, so go general
+# Should exist /etc/os-release but usually doesn't
+# http://www.freedesktop.org/software/systemd/man/os-release.html
+# Hmm, maybe look for yum, apt, pacman, pkg, brew
+case $(uname -s) in
+  FreeBSD) my_osfam=bsd   my_osdist=freebsd ;;
+  Darwin)  my_osfam=bsd   my_osdist=mac ;;
+  Linux)   my_osfam=linux my_osdist=unknown ;;
+esac
+
 # This order can be important. Nice to have all the envars
 # set so subsequent functions etc can make use of them.
 my_configs=(

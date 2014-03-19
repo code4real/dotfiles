@@ -11,7 +11,7 @@
 alias a='awk'
 # C -- cat/pygmentize
 # None seem to have markdown support
-alias c='/usr/bin/coderay' # uses bold unlike pygmentize
+alias c='coderay' # uses bold unlike pygmentize
 alias c2='python3 =pygmentize'
 #alias c='pygmentize'
 #alias c='src-hilite-lesspipe.sh'
@@ -63,8 +63,29 @@ alias x='exit'
 # Y -- yaourt package manager
 alias y=yaourt
 
+### Platform aware
+# http://tomayko.com/writings/gnu-is-killing-solaris
+# Find the option for using colors in ls, depending on the version: Linux or BSD
+if [[ $my_osfam == "bsd" ]]; then
+  # Hopefully coreutils is installed to get g* utils
+  gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=auto'
+  coreutils=(
+    base64 basename cat chcon chgrp chmod chown chroot cksum comm cp csplit
+    cut date dd df dir dircolors dirname du echo env expand expr factor false
+    fmt fold head hostid id install join link ln logname md5sum mkdir mkfifo
+    mknod mktemp mv nice nl nohup nproc numfmt od paste pathchk pinky pr
+    printenv printf ptx pwd readlink realpath rm rmdir runcon seq sha1sum
+    sha224sum sha256sum sha384sum sha512sum shred shuf sleep sort split stat
+    stdbuf stty sum sync tac tail tee test timeout touch tr true truncate
+    tsort tty uname unexpand uniq unlink users vdir wc who whoami yes )
+  for cu in $coreutils; do alias $cu=g$cu; done
+fi
+
+alias sl='locate -r'
+alias loc='locate -r'
+alias up='sudo updatedb'
+
 ### Listing
-# Make all ls have color.
 alias ls='ls --color=auto'
 # sort by Extension.
 alias le='ls -hlABFX'
@@ -81,7 +102,7 @@ alias l1="ls -rt |awk 'END {print $NF}'" # or |tail -1
 alias ltc='ls -l --time=ctime'
 alias lta='ls -l --time=atime'
 alias ltm='ls -l --time=mtime'
-alias lmp='ls -lBX *.py'
+
 
 ### Ruby
 #   Rubygems
@@ -144,8 +165,6 @@ alias spk='sudo pkill'
 alias pm='sudo pacman'
 alias yao='yaourt --noconfirm'
 alias yaoup='yao -Syu --aur'
-alias sl='slocate -r'
-alias up='sudo updatedb'
 
 ### Ubuntu
 # apt-* shortcuts
@@ -245,7 +264,8 @@ alias ve-cdve='cdvirtualenv'
 
 ### Vim
 # Editing of config stuff.
-alias vi-shell='v -o $my_shdir/zshrc $my_shdir/options.zsh $my_shdir/envars.zsh $my_shdir/aliases.zsh $my_shdir/functions.zsh'
+#alias vi-shell='v -o $my_shdir/zshrc $my_shdir/options.zsh $my_shdir/envars.zsh $my_shdir/aliases.zsh $my_shdir/functions.zsh'
+alias vi-shell='v -o $my_shdir/zshrc $my_shdir/zshenv $my_shdir/*.zsh'
 alias vi-sudo='sudoedit'
 
 # Seems to need to live as alias, not as file/function
@@ -284,6 +304,16 @@ alias rd=rmdir
 alias pu='pushd'
 alias po='popd'
 alias cx='chmod +x'
+
+alias 1='pu'
+alias 2='pu ~2'
+alias 3='pu ~3'
+alias 4='pu ~4'
+alias 5='pu ~5'
+alias 6='pu ~6'
+alias 7='pu ~7'
+alias 8='pu ~8'
+alias 9='pu ~9'
 
 alias de='vared dirstack'
 alias dired='vared dirstack'

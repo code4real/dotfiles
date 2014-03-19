@@ -8,21 +8,15 @@
 ######################################################################
 ### Params (need to come before autoload stuff)
 
-# Search path for function defs; add mine here.
+# The search path for function defs; add mine here.
 # System completions live in:
 #   /usr/share/zsh/functions/Completion/Unix/
 # so have a local personal dir similar.
-#fpath=( $fpath ~/config/zfunc )
-# My funcs.
-fpath=( ~/config/zsh/functions $fpath )
-# My prompts.
-fpath=( ~/config/zsh/prompts $fpath )
-# Contrib funcs.
-fpath=( ~/contrib/zsh/functions $fpath )
-
-# Zsh book pg 334
-fpath=( ~/config/zsh/zfunc $fpath )
-autoload -- ~/config/zsh/zfunc/[^_]*(:t)
+# My funcs (Zsh book pg 334)
+fpath=(     ~/config/zsh/functions  $fpath )
+autoload -- ~/config/zsh/functions/[^_]*(:t)
+fpath=(     ~/config/zsh/prompts    $fpath )  # my prompts
+fpath=(     ~/contrib/zsh/functions $fpath )  # others' funcs
 
 # This is awesome! Tab-completion works to expand these!
 # Needs to only include dirs that don’t have lots of subdirs.

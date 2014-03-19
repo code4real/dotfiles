@@ -49,5 +49,5 @@ if [[ $os == Linux ]]; then
 elif [[ $os == FreeBSD || $os == Darwin ]]; then
   my_os=bsd
 else
-  my_os=unsupported
+  my_os='unknown/unsupported'
 fi
