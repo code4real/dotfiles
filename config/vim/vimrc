@@ -134,54 +134,54 @@ Bundle 'gmarik/vundle'
 Bundle 'vim-scripts/Color-Sampler-Pack'
 
 Bundle 'kien/ctrlp.vim'
-Bundle 'tpope/vim-markdown.git'
+Bundle 'tpope/vim-markdown'
 Bundle 'nelstrom/vim-markdown-folding'
-Bundle 'juvenn/mustache.vim.git'
-Bundle 'nono/vim-handlebars.git'
-Bundle 'scrooloose/nerdcommenter.git'
-Bundle 'scrooloose/nerdtree.git'
-Bundle 'scrooloose/syntastic.git'
+Bundle 'juvenn/mustache.vim'
+Bundle 'nono/vim-handlebars'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/syntastic'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'vim-scripts/ck.vim'
-Bundle 'tomtom/tlib_vim.git'
-Bundle 'vim-scripts/transpose-words.git'
-Bundle 'tpope/vim-repeat.git'
-Bundle 'tpope/vim-surround.git'
-Bundle 'tpope/vim-unimpaired.git'
-Bundle 'tpope/vim-liquid.git'
+Bundle 'tomtom/tlib_vim'
+Bundle 'vim-scripts/transpose-words'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'tpope/vim-liquid'
 Bundle 'tpope/vim-abolish'
-Bundle 'MarcWeber/vim-addon-mw-utils.git'
-Bundle 'jeetsukumaran/vim-buffergator.git'
-Bundle 'kchmck/vim-coffee-script.git'
-Bundle 'gkz/vim-ls.git'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'jeetsukumaran/vim-buffergator'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'gkz/vim-ls'
 Bundle 'jelera/vim-javascript-syntax'
-Bundle 'vim-scripts/vim-json-bundle.git'
+Bundle 'vim-scripts/vim-json-bundle'
 Bundle 'groenewege/vim-less'
-Bundle 'slim-template/vim-slim.git'
+Bundle 'slim-template/vim-slim'
 Bundle 'digitaltoad/vim-jade'
-Bundle 'MicahElliott/vim-powerline.git'
+Bundle 'MicahElliott/vim-powerline'
 Bundle 'stephenmckinney/vim-solarized-powerline'
-Bundle 'jpalardy/vim-slime.git'
+Bundle 'jpalardy/vim-slime'
 " Visual block editing (mirror):
 " http://vim.wikia.com/wiki/Applying_substitutes_to_a_visual_block
 Bundle 'taku-o/vim-vis'
-Bundle 'vim-scripts/AnsiEsc.vim.git'
-Bundle 'sickill/vim-monokai.git'
-Bundle 'tomasr/molokai.git'
-Bundle 'nathanaelkane/vim-indent-guides.git'
-Bundle 'godlygeek/tabular.git'
+Bundle 'vim-scripts/AnsiEsc.vim'
+Bundle 'sickill/vim-monokai'
+Bundle 'tomasr/molokai'
+Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'godlygeek/tabular'
 
 " FIXME: Might not want autoclose
 Bundle 'Townk/vim-autoclose'
 
 " Too complex to setup, maybe
-Bundle 'Shougo/neocomplete.vim'
+"Bundle 'Shougo/neocomplete.vim'
 
 
 "-- Gists ------------------------------------------------------------
 Bundle 'MicahElliott/UniCycle.git'
 " Vim “adobe” color scheme
-Bundle 'http://gist.github.com/720355.git'
+"Bundle 'http://gist.github.com/720355.git'
 
 
 filetype plugin indent on     " required!
@@ -475,22 +475,22 @@ map <F12> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans
 
 "      vim            gvim
 let g:rbpt_colorpairs = [
-    \ ['92',       'RoyalBlue3'],
-    \ ['161',    'SeaGreen3'],
-    \ ['118',    'DarkOrchid3'],
-    \ ['135',   'firebrick3'],
-    \ ['81',    'RoyalBlue3'],
-    \ ['166',     'SeaGreen3'],
-    \ ['67', 'DarkOrchid3'],
-    \ ['226',       'firebrick3'],
-    \ ['92',        'RoyalBlue3'],
-    \ ['161',      'SeaGreen3'],
+    \ ['92',  'RoyalBlue3'],
+    \ ['161', 'SeaGreen3'],
     \ ['118', 'DarkOrchid3'],
-    \ ['135',    'firebrick3'],
-    \ ['81',   'RoyalBlue3'],
-    \ ['166',    'SeaGreen3'],
-    \ ['67',     'DarkOrchid3'],
-    \ ['226',      'firebrick3'],
+    \ ['135', 'firebrick3'],
+    \ ['81',  'RoyalBlue3'],
+    \ ['166', 'SeaGreen3'],
+    \ ['67',  'DarkOrchid3'],
+    \ ['226', 'firebrick3'],
+    \ ['92',  'RoyalBlue3'],
+    \ ['161', 'SeaGreen3'],
+    \ ['118', 'DarkOrchid3'],
+    \ ['135', 'firebrick3'],
+    \ ['81',  'RoyalBlue3'],
+    \ ['166', 'SeaGreen3'],
+    \ ['67',  'DarkOrchid3'],
+    \ ['226', 'firebrick3'],
     \ ]
 " outermost parens is last entry
 let g:rbpt_max = 16
