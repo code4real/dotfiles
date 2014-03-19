@@ -1,4 +1,4 @@
-# Code4Real Dotfiles: reusable and customizable
+# Code4Real Dotfiles Distribution: reusable and customizable
 
 Configuration and mini-scripts tuned for zsh, vim, urxvt, tmux, repls, etc on
 various operating system families/distros: bsd, linux, mac. 256-color support
@@ -6,7 +6,7 @@ is featured throughout the stack. Additional setup of X11, fonts, and I3-WM is
 included but optional. Tested on various servers, laptops (including
 Chromebooks), and minimalistic devices like the RaspberryPi.
 
-Suited for neophytes and professionals alike.
+**Suited for neophytes and professionals alike.**
 
 Watch the [bootstrapping tutorial screencast](http://code4real.com/bootstrapping)
 (not yet published) to work through the steps herein.
@@ -21,34 +21,46 @@ Notable features:
 * Bootstrapping/install script for easy and quick starting on most operating
   systems
 
-* Well documented code, easy to fork-n-hack!
+* Well documented code -- easy to understand and fork-n-hack!
 
 * Full Zsh and LiveScript/NodeJS programming environment for systems and web
   development
 
 * Many handy settings, aliases, functions, completions, prompts, colors, etc,
-  evolved through 15 years of professional software development
+  evolved over 15 years of diverse, professional software development
+  experience
 
-* Separates own dotfiles (`~/config`) from tool-installed (`~/.*` and
-  `~/.config`) via symlinks; e.g., `~/.vimrc -> ~/config/vimrc`
+* A cohesive set of mnemonic vim-like keyboard shortcuts/mappings similar
+  across all tools
 
-* Designates standard directory structure (via `.gitignore`s)
+* Well structured and modular: separates own dotfiles (`~/config`) from
+  tool-installed (`~/.*` and `~/.config`) via symlinks; e.g., `~/.vimrc ->
+  ~/config/vimrc`.
+  
+* Modular (vs monolithic) confiig enables safe reloading of single modules
+  (`re-funcs`, `re-aliases`, etc)
 
-* Provides `dotfiles` git-wrapper script (and several `d*` aliases) as a proxy
-  for git
+* Designates standard directory structure (e.g., `src`, `local`, `bin`,
+  `config`, via `.gitignore`s)
+
+* Provides `dotfiles` git-wrapper script (and several `d*` aliases) as a
+  convenient proxy for git, to manage full portable environment
 
 * Time-able, tunable, friendly, and fast
 
-* Tested on ArchLinux, Ubuntu, Debian, Fedora, Centos, and PC-BSD
+* Tested on ArchLinux, Ubuntu, Debian, Fedora, Centos, and PC-BSD/FreeBSD
 
 * Integrates with the parallel Code4Real student curriculum and tutorials
   (coming soon). But great for non-student professionals, too.
 
-Most interesting areas:
+* Optional X11/I3 setup with shortcuts for multi-monitor and mouse toggling.
+  Various keyboard enhancements: mappings to assign CapsLock, Esc, Alt,
+  tilde/backtick, etc to ergonomically safe positions, faster keyboard repeat
+  rates
 
-* `zsh/` --  top level control and file hierarchy
-* `vim/` -- vim settings and vundle add-ons: `.vimrc` and `.vim/*`
-* `config/` -- miscellaneous dotfiles
+Most interesting top-level areas:
+
+* `config/` --  top level control and hierarchy for vim, zsh, tmux, x11, etc
 * `contrib/` -- several small helper scripts not commonly available
 * `bin/` -- your scripts (add your own if not gists)
 * `.*` -- various other config symlinks to files and directories
@@ -206,11 +218,27 @@ extended resources are also mentioned.
   install/upgrade new (and old) versions of Node to your local non-system
   areas.
 
+* [GNU CoreUtils](http://www.gnu.org/software/coreutils/) -- the basic file,
+  shell and text manipulation utilities of the GNU operating system, such as
+  rm, pwd, cat, wc, date, touch, etc. The CoreUtils package is not installed
+  on BSD systems by default, due to their licensing. BSD has alternate
+  versions of these commands, but their options and behaviors are different in
+  enough enough ways to cause headaches. These little tools are the backbone
+  of the UNIX toolchain, so we'll install and rely on the single consistent
+  CoreUtils set even when on BSD.
+
+* [Yaourt]()/[AUR]() and [pkgng](https://wiki.freebsd.org/pkgng) -- package
+  managers and repositories that make it easy to install everything under the
+  sun, and even create and share our own packages.
+  (FIXME: remove this bullet, or might as well get into systemd and rc.d)
+
 * *(optional)* [I3](http://i3wm.org/) (on
   [X11](http://en.wikipedia.org/wiki/X_Window_System)) -- a light-weight and
   minimalist tiling window manager (WM) that is simple to install/configure,
-  and features Vim-like operation, plus tabbed and floating windows. A custom
-  color theme and vim bindings are included.
+  and features Vim-like operation, plus tabbed and floating windows, and
+  sensible multi-monitor support. A custom color theme and vim bindings are
+  included. Great
+  [key-bindings reference here](http://i3wm.org/docs/userguide.html#_default_keybindings).
 
 * *(optional)* [OrpFont](https://github.com/MicahElliott/Orp-Font) -- small
   bitmap pixel-perfect fonts in medium, bold, italic, book, with extended
@@ -223,7 +251,7 @@ extended resources are also mentioned.
     *  README.md -- this file
     *  bin       -- small (usually standalone) scripts that I have written
     *  config    -- git-manageable, user-written CONFIGuration (mostly dot-files)
-    *  contrib   -- other people's scripts that need to be under my control
+    *  contrib   -- others' scripts that need to be under my control
     *  doc       -- text DOCuments I write, books, presentations, personal logs
     *  etc       -- system-specific symlinks to important sytem ETC files
     *  test      -- programmatically test this dotfiles environment
@@ -255,18 +283,18 @@ extended resources are also mentioned.
 
 ## FAQs
 
-**Which OSs can I use with Code4Real?**
+**Q: Which OSs can I use with Code4Real?**
 
-Most Linux distro families are supported/tested: Arch, Debian (and Ubuntu, etc),
-Red Hat (centos, fedora). FreeBSD and derivatives (PC-BSD) also works.
+A: Most Linux distro families are supported/tested: Arch, Debian (and Ubuntu,
+etc), Red Hat (centos, fedora). FreeBSD and derivatives (PC-BSD) also works.
 
 You can even use a Mac, though I encourage you to try out another more open
 system. There are several easy and free ways (VirtualBox or USB-stick image)
 to try out Linux or BSD.
 
-**Which OS do you recommend?**
+**Q: Which OS do you recommend?**
 
-Prefer any OS that is as "open" as possible.
+A: Prefer an OS that is as "open" as possible.
 
 We presently use *Arch Linux* more than the others. It's very convenient to
 have a rolling release, and the *yaourt* package manager makes for a very
@@ -278,33 +306,34 @@ really easy. It's also an extension to the very robust FreeBSD, which is a
 high performing server supporting ZFS and sophisticated system debugging via
 DTrace.
 
-**What about MS Windows support?**
+**Q: What about MS Windows support?**
 
-We went quite a ways down the path of trying to make it work, but in the end
+A: We went quite a ways down the path of trying to make it work, but in the end
 there was too much heartache around getting NodeJS to run well, and Cygwin is
 different enough and hard enough for students to install, that it proved to be
 unsupportable.
 
-**I prefer the ABC tool over the XYZ tool you've selected.**
+**Q: I prefer the ABC tool over the XYZ tool you've selected.**
 
-This setup can be customized to your liking. Feel free to use Emacs instead of
-Vim, for example. But many of the tutorials that are part of Code4Real will be
-featuring the supported tools that are included.
+A: This setup can be customized to your liking. Feel free to use Emacs instead
+of Vim, for example. But many of the tutorials that are part of Code4Real will
+be featuring the supported tools that are included.
 
-**Why use symlinks instead of the real files in $HOME?**
+**Q: Why use symlinks instead of the real files in $HOME?**
 
-Maintaining your important files as symbolic links makes them easier to manage
-and separate from all the other config files that are dumped there by the
-dozens of other tools you use. This is life until everyone adopts the
-[XDG standards](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html),
-which may never happen. Manually creating symlinks to the files you
-actually want to track is a useful explicit step to document such intention.
+A: Maintaining your important files as symbolic links makes them easier to
+manage and separate from all the other config files that are dumped there by
+the dozens of other tools you use. This is life until everyone adopts the [XDG
+standards](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html),
+which may never happen. Manually creating symlinks to the files you actually
+want to track is a useful explicit step to document such intention.
 
-**Why vim instead of gvim?**
+**Q: Why vim instead of gvim?**
 
-You'll have many occasions to be running your editor remotely. Graphical tools
-are less useful for such situations. Vim/URxvt/tmux is usually a better
+A: You'll have many occasions to be running your editor remotely. Graphical
+tools are less useful for such situations. Vim/URxvt/tmux is usually a better
 combination of fonts and windows for remote work, and arguably for local.
+
 
 ## Alternative environments
 
