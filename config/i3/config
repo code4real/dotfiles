@@ -17,28 +17,29 @@ exec xset r rate 250 60 # super fast delay and rate!
 # NOTE: some of these are being set in .xinitrc; could maybe move some here.
 
 # Keyboard indicator icon; always on wrong statusbar
-exec fbxkb
+#exec fbxkb  # not on bsd
 
 # Too simple maybe?
 #exec volumeicon
 # Wow, fancy!
-exec volti
+#exec volti  # not on bsd
 
 # New from .xinitrc
 exec parcellite
 #exec nm-applet
-exec wicd-client
-exec batti
-exec gatotray
+#exec wicd-client  # not on bsd
+#exec batti  # not on bsd
+#exec gatotray
 # FIXME: check to see if this works, like in .xinitrc
-exec eval $(keychain --eval --agents ssh -Q --quiet id_rsa)
+#exec eval $(keychain --eval --agents ssh -Q --quiet id_rsa)
 exec stty -ixon
 
 # Growl On Linux
 exec gol
 
-# Too big and no real controls.
+# Too big and no real controls but runs on bsd and linux
 #exec gvolwheel
+#exec gtmixer
 
 # EXP: only an icon; no functionality
 #exec cbatticon
@@ -47,8 +48,8 @@ exec gol
 #exec udiskie
 
 # font for window titles. ISO 10646 = Unicode
-#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-font -misc-orp-bold-r-*--*-*-*-*-*-*-iso10646-1
+font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+#font -misc-orp-bold-r-*--*-*-*-*-*-*-iso10646-1
 # Big enough to see nm-applet's indicator in i3status
 #font -*-tamsyn-bold-*-*-*-20-*-*-*-*-*-*-*
 # https://faq.i3wm.org/question/183/how-to-get-i3wm-font-anti-aliasing/
@@ -212,8 +213,8 @@ bindsym $mod+r mode "resize"
 # http://i3wm.org/docs/userguide.html#_configuring_i3bar
 bar {
         output LVDS1
-        #status_command i3status --config ~/.i3status.conf
-        status_command my-i3status
+        #status_command i3status -c ~/.i3status.conf
+        status_command ~/contrib/bin/my-i3status
         position top
         mode dock
         modifier Mod4

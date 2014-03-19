@@ -4,9 +4,9 @@
 # Used in bottom screen bar.
 # See i3status(1).
 
-i3status --config ~/config/i3/status.conf | while :
+i3status -c ~/config/i3/status.conf | while :
 do
   read line
-  mem=$(mempercent)
+  mem=$(~/contrib/bin/mempercent)
   echo "MEM:$mem | $line" || exit 1
 done

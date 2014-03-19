@@ -4,10 +4,10 @@
 !
 ! Use `xfontsel`, `xlsfonts`, and `fc-list` to find other fonts.
 !
-! On Ubuntu I have to name this file ‘~/.Xdefaults-$(hostname)’
+! On Ubuntu this file may need to be named ‘~/.Xdefaults-$(hostname)’
 !
-! ‘xrdb -load ~/.Xdefaults-stud’ is supposed to reload this file, but
-! doesn’t seem to, so just fire new xterm upon every change.
+! ‘xrdb -load ~/.Xdefaults’ is supposed to reload this file, but
+! doesn’t seem to, so just fire new urxvt upon every change.
 !
 ! Other resources:
 ! * showrgb — util to dump color db.
@@ -67,7 +67,7 @@ URxvt.iso14755: false
 
 
 URxvt.perl-ext-common:      default,url-select,clipboard,font-size
-URxvt.url-select.launcher:  firefox-aurora
+URxvt.url-select.launcher:  firefox
 URxvt.url-select.underline: true
 
 URxvt.clipboard.autocopy:   true
@@ -77,14 +77,14 @@ URxvt.clipboard.pastecmd: xclip -o -selection clipboard
 
 ! man urxvt
 
-! Turning off scrollbar for now.
+! Turning off scrollbar
 URxvt*scrollBar:false
 URxvt*scrollstyle:plain
 URxvt*scrollTtyOutput:False
 URxvt*scrollTtyKeypress:True
 URxvt*scrollBar_right:True
 URxvt*pointerBlank:True
-!URxvt*urlLauncher:/usr/bin/firefox-aurora
+!URxvt*urlLauncher:/usr/bin/firefox
 URxvt*urlLauncher: /usr/bin/zurl
 URxvt*cutchars: \\`"'"()*,;<>[]^{|}
 !URxvt*transparent:True
