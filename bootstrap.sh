@@ -25,9 +25,10 @@ sleep 5
 echo -e "\nInstalling essential system packages.\n"
 xtargets=( xclip arandr bdftopcf parcellite )
 targets=( $WM )
-targets+=( wget curl htop git zsh tmux vim tree )  # common across
+targets+=( coreutils wget curl htop git zsh tmux vim tree )  # common across
 if [[ $os == arch   ]]; then
   targets+=( zsh git rxvt-unicode urxvt-perls tmux vim )
+  # Set up yaourt
   sudo pacman -S ${targets[@]}
 elif [[ $os == redhat ]]; then
   targets+=( coreutils git zsh gawk vim rxvt-unicode-256color wget tmux )
@@ -42,9 +43,11 @@ elif [[ $os == debian ]]; then
   sudo apt-get -y install ${targets[@]}
 elif [[ $os == bsd ]]; then
   targets+=( coreutils git zsh gawk rxvt-unicode tmux vim tree rubygem-coderay
-  bdftopcf growl-for-linux gvolwheel )
+  )
+  xtargets+=( bdftopcf growl-for-linux gvolwheel gtmixer )
   #echo "ENABLE: X11 setup by adding this line to ~/.pcdmsessionstart"
   echo -e "\n./.xinitrc" >> ~/.xprofile
+  # Set up pkgng?
   sudo pkg install ${targets[@]}
 elif [[ $os == mac ]]; then
   targets+=( coreutils git zsh gawk vim rxvt-unicode-256color wget tmux )
@@ -84,9 +87,18 @@ git clone https://github.com/MicahElliott/Orp-Font ~/src/Orp-Font
 cd ~/src/Orp-Font
 for font in lib/*.bdf; do ./xfont-install.zsh $font; done
 
-echo "\nInstalling zsh syntax highlighting\n"
+echo -e "\nInstalling zsh syntax highlighting\n"
+
+echo -e "\nInstalling Node Version Manager (NVM) to ~/.nvm\n"
+git clone https://github.com/creationix/nvm.git ~/.nvm
+echo -e "Installing your first Node\n"
+en-nvm
+node install 0.10
+npm install -g LiveScript
+echo -e "You can now fire up and interactive LiveScript REPL:"
+echo -e "  % ils\n"
 
 echo
 echo 'DONE!'
 echo -e "\nTry out the git proxy now in your path:"
-echo "  dotfiles status  # or just: dst"
+echo "  % dotfiles status  # or just: dst"
