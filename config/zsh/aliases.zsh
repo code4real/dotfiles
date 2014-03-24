@@ -68,22 +68,23 @@ alias y=yaourt
 # Find the option for using colors in ls, depending on the version: Linux or BSD
 if [[ $my_osfam == "bsd" ]]; then
   # Hopefully coreutils is installed to get g* utils
-  gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=auto'
-  coreutils=(
-    base64 basename cat chcon chgrp chmod chown chroot cksum comm cp csplit
-    cut date dd df dir dircolors dirname du echo env expand expr factor false
-    fmt fold head hostid id install join link ln logname md5sum mkdir mkfifo
-    mknod mktemp mv nice nl nohup nproc numfmt od paste pathchk pinky pr
-    printenv printf ptx pwd readlink realpath rm rmdir runcon seq sha1sum
-    sha224sum sha256sum sha384sum sha512sum shred shuf sleep sort split stat
-    stdbuf stty sum sync tac tail tee test timeout touch tr true truncate
-    tsort tty uname unexpand uniq unlink users vdir wc who whoami yes )
-  for cu in $coreutils; do alias $cu=g$cu; done
+  # Applies to non-interactive only
+  if gls --color -d . &>/dev/null 2>&1; then
+    alias ls='gls --color=auto' ||
+    coreutils=(
+      base64 basename cat chcon chgrp chmod chown chroot cksum comm cp csplit
+      cut date dd df dir dircolors dirname du echo env expand expr factor
+      false fmt fold head hostid id install join link ln logname md5sum mkdir
+      mkfifo mknod mktemp mv nice nl nohup nproc numfmt od paste pathchk pinky
+      pr printenv printf ptx pwd readlink realpath rm rmdir runcon seq sha1sum
+      sha224sum sha256sum sha384sum sha512sum shred shuf sleep sort split stat
+      stdbuf stty sum sync tac tail tee test timeout touch tr true truncate
+      tsort tty uname unexpand uniq unlink users vdir wc who whoami yes )
+    for cu in $coreutils; do alias $cu=g$cu; done
+  else
+    print "You should install coreutils"
+  fi
 fi
-
-alias sl='locate -r'
-alias loc='locate -r'
-alias up='sudo updatedb'
 
 ### Listing
 alias ls='ls --color=auto'
@@ -328,6 +329,10 @@ alias en-ffsdk='ffi'
 alias clean="rm -f *~ .*~ core *.bak"
 alias info='info --vi-keys'
 
+alias sl='locate -r'
+alias loc='locate -r'
+alias up='sudo updatedb'
+
 alias zg='zgrep -E --color=always'
 
 alias el='elinks -no-numbering -no-references -dump-width 200 -dump'
@@ -392,6 +397,8 @@ alias ch='chromium --disable-web-security'
 alias cu='curl -i'
 
 alias mysql='mysql --auto-rehash'
+
+alias ans=ansible
 
 alias stderred='export LD_PRELOAD="/usr/lib/libstderred.so"'
 

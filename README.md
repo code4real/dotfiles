@@ -68,12 +68,13 @@ Most interesting top-level areas:
 
 ## Installing prerequisites
 
-A `bootstrap.sh` script can be downloaded
-[here](https://raw.github.com/code4real/dotfiles/master/bootstrap.sh). Running
-it will install the required missing utilities onto your system. You'll need
-root privileges to install them. If you're a student on a shared system, your
-instructor may have already done the installation, but everyone should
-"bootstrap" to prepare their personal environment.
+A `bootstrap.sh` script can be downloaded:
+[raw.github.com/code4real/dotfiles/master/bootstrap.sh](https://raw.github.com/code4real/dotfiles/master/bootstrap.sh).
+Running it (wait, not yet!) will install and configure the required missing
+utilities onto your system. You'll need root privileges to install them. If
+you're a student on a shared system, your instructor may have already done the
+installation (it'll check for that), but everyone should "bootstrap" to
+prepare their personal environment.
 
 
 ## Setup
@@ -85,12 +86,15 @@ as yourself. Likewise, a `#` prompt means the root user is active.
 1. **Create a new user account** if you don't already have one or just want to
    try a fresh start. As a root/admin user, run:
 
-        # useradd -s /usr/bin/zsh -m YOUR_USERNAME
+        lnx#    useradd -s /usr/bin/zsh       -m    YOUR_USERNAME
+        bsd# pw useradd -s /usr/local/bin/zsh -m -n YOUR_USERNAME
+        # passwd YOUR_USERNAME
+
 
    Or, for mac, download the
    [useradd script](https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh),
    and run:
-        # ./useradd-mac.sh YOUR_USERNAME
+        mac# ./useradd-mac.sh YOUR_USERNAME YOUR_NEW_PASSWORD
 
    **OR**, if you're building off your **existing account**, make Zsh your default
    shell:
@@ -128,8 +132,8 @@ as yourself. Likewise, a `#` prompt means the root user is active.
         mkdir ~/tmp
         mv .bash* .zsh* .vim* ~/tmp/
 
-1. Sign in to [github](http://github.com) and fork this repo to make your own
-   which you can modify
+1. Sign in to [github](http://github.com) and [fork](fork) this repo to make
+   your own which you can modify
 
 1. Clone and set up your new repo.
 

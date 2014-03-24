@@ -62,6 +62,7 @@ bindkey "^[H" run-help
 print "ENABLE: zsh syntax highlighting"
 print "https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/highlighters/main/main-highlighter.zsh\n"
 #source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/local/src/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets pattern )
 # Hmm, just basic colors? rgybmc
 #ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=cyan

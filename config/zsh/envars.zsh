@@ -144,3 +144,6 @@ lh='localhost:3000'
 # Appears to need to be down here at bottom.
 # http://www.zsh.org/mla/users/1998/msg00490.html
 typeset -U path
+
+# Trying this too since saw it growing
+typeset -U fpath

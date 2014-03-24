@@ -7,9 +7,12 @@
 
 # === Typically, this is all you need to edit ===
 
-USERNAME=cody
-FULLNAME="Cody"
-PASSWORD="hard_to_hack"
+#USERNAME=cody
+USERNAME=${1?must provide username}
+#FULLNAME="Cody"
+FULLNAME=${2?must provide Full Name}
+PASSWORD="uncrackable"
+echo "Setting temporary password to $PASSWORD"
 
 # A list of (secondary) groups the user should belong to
 # This makes the difference between admin and non-admin users.
