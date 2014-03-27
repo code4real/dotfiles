@@ -51,6 +51,7 @@ set_targets() {
 check_privs() {
   touch /tmp/foo
   cmd="chown root.root /tmp/foo > /dev/null"
+  rm /tmp/foo
   has_sudo=False has_root=False
   #if ! sudo ls >/dev/null; then
   #if ! chown root.root /tmp/foo >/dev/null; then
@@ -95,7 +96,7 @@ grok_system() {
     pkg)      pmi="$pm install";        osfam=bsd;    pkgs=(${pkgngs[@]})  ;;
     brew)     pmi="$pm install";        osfam=mac;    pkgs=(${brews[@]})   ;;
   esac
-  echo -e "\n\nOS Family: $osfam\tPackage Mgr: $pm\n"
+  echo -e "\nOS Family: $osfam\nPackage Mgr: $pm\n"
   [[ $has_sudo == True ]] && pmi="sudo $pmi"
 }
 
@@ -127,7 +128,7 @@ check_for_installed_pkgs() {
   #for p in ${pkgs[@]}; do
   for c in ${cmds[@]}; do
     #which $c >/dev/null 2>&1 || missings+=" $c"
-    #whereis $c |cut -f2 -d' ' >/dev/null 2>&1 
+    #whereis $c |cut -f2 -d' ' >/dev/null 2>&1
     which $c >/dev/null 2>&1 || missings=( ${missings[@]} $c )
   done
   if [[ ${#missings} != 0 ]]; then
@@ -158,10 +159,13 @@ prompt_for_info() {
   fi
   echo -e "Setting up for $newuser user: $user\n"
   [[ -z $GH_USER ]] &&
-    read -p 'GitHub username: ' ghuser
-  dummy=https://raw.github.com/$ghuser/dotfiles/master/config/zsh/functions/foo
+    read -p 'GitHub username: ' GH_USER ||
+    echo "Using $GH_USER as GitHub username"
+  export GH_USER
+  dummy=https://raw.github.com/$GH_USER/dotfiles/master/config/zsh/functions/foo
   echo "Checking for existence of your forked dotfiles repo on GitHub..."
   if wget -q $dummy; then
+    rm foo
     echo "Cool, looks like you've already forked your dotfiles repo."
   else
     #echo "Oops. You need to fork this dotfiles repo on github.com:"
@@ -185,7 +189,7 @@ set_passwd() {
 }
 
 create_user() {
-  if [[ $newuser == NEW ]]; then
+  if [[ $newuser == NEW ]] && grep -vq "\b$user\b" /etc/passwd; then
     wzsh=$(whereis zsh |cut -f2 -d' ')
     case $pm in
       pacman|yum|apt-get|zypper)
@@ -220,8 +224,10 @@ prompt_for_info
 create_user
 install_sys_pkgs
 
-wget https://raw.github.com/$ghuser/dotfiles/master/contrib/bin/bootstrap-user.zsh
-su -c ./bootstrap-user.zsh - $user
+bsuser=https://raw.github.com/code4real/dotfiles/master/contrib/bin/bootstrap-user.zsh
+wget $bsuser -O /tmp/bootstrap-user.zsh
+chmod +x /tmp/bootstrap-user.zsh
+su -c "/tmp/bootstrap-user.zsh $passwd $GH_USER" - $user
 
 echo -e "\nDONE\!"
 echo -e "\nTry out the git proxy now in your path:"
