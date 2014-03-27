@@ -2,6 +2,10 @@
 
 # bootstrap — provision a new system with essential packages
 
+# Pre-run instructions:
+# - create a github account
+# - fork https://github.com/code4real/dotfiles
+
 # Unfortunately, this has to be bash since assuming nothing (zsh) on system.
 #
 # We're basing the OS/family on package mgr available.
@@ -17,105 +21,147 @@ WM=i3
 
 # Try to make running as simple as possible (should not be required)
 usage() { echo USAGE: bootstrap USERNAME GITHUB_USERNAME; }
-err() { echo -e "ERROR: $@" 2>&1 ; exit 1; }
+err() { echo -e "\nERROR: $@" 2>&1 ; exit 1; }
 
 set_targets() {
+  # FIXME: suggest other good packages to install:
+  # firefox
+  # FIXME: set some things inside configs (envars.zsh, .Xdefaults) browser
   common=( zsh gawk rxvt-unicode tmux tree )
+  #common=( zsh:zsh gawk:gawk rxvt-unicode:urxvt tmux:tmux tree:tree )
   xpkgs=(  # hopefully these are common across systems
-    xclip arandr bdftopcf growl-for-linux gvolwheel
-    gtmixer parcellite )
-  yums=(    ${common[@]} git vim vim tree rubygem-coderay )
-  apts=(    ${common[@]} git vim vim tree rubygem-coderay )
-  pacmans=( ${common[@]} git vim vim tree rubygem-coderay )
-  zyppers=( ${common[@]} git vim vim tree rubygem-coderay )
-  pkgngs=(  ${common[@]} git vim vim tree rubygem-coderay )
-  brews=(   ${common[@]} git vim vim tree rubygem-coderay )
+    xclip arandr bdftopcf growl-for-linux gvolwheel parcellite )
+  #yums=(    ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  #apts=(    ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  #pacmans=( ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  #zyppers=( ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  #pkgngs=(  ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  #brews=(   ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
+  yums=(    ${common[@]} git vim tree rubygem-coderay )
+  apts=(    ${common[@]} git vim tree rubygem-coderay )
+  pacmans=( ${common[@]} git vim tree rubygem-coderay )
+  zyppers=( ${common[@]} git vim tree rubygem-coderay )
+  pkgngs=(  ${common[@]} git vim tree rubygem-coderay )
+  brews=(   ${common[@]} git vim tree rubygem-coderay )
+  cmds=( git vim tree coderay )
+  xcmds=( xclip arandr bdftopcf gol gvolwheel parcellite )
 }
 
 # Check for sudo privileges or existence of required packages.
 check_privs() {
-  has_sudo=True
-  if ! sudo ls >/dev/null; then
-    echo -e "Looks like you don't have super powers."
+  touch /tmp/foo
+  cmd="chown root.root /tmp/foo > /dev/null"
+  has_sudo=False has_root=False
+  #if ! sudo ls >/dev/null; then
+  #if ! chown root.root /tmp/foo >/dev/null; then
+  if eval $cmd; then
+    echo -e "\nOh wow, you're root. Proceeding..."
+    has_root=True
+    sudo() { eval $@; }
+  elif sudo eval $cmd; then
+    # Or just whoami??
+    echo -e "\nGood, you're using sudo."
+    has_sudo=True
+  else
+    echo -e "\nLooks like you don't have super powers."
     echo -e "Set up sudo if you wish to remedy this."
     has_sudo=False
   fi
 }
 
 find_pkg_mgr() {
-  echo -e "Determining your package manager"
+  echo -e "\nDetermining your package manager"
   for pm_maybe in yum apt-get pacman zypper pkg brew; do
-    if which $pm_maybe 2>/dev/null; then
-      pm=$pm
-      echo "  package manager: $pm"
+    # Ugh, which isn't even installed on some systems.
+    #if which $pm_maybe 2>/dev/null; then
+    if [[ -n $(whereis $pm_maybe |sed 's/.*://') ]]; then
+      pm=$pm_maybe
+      echo "  $pm"
       break
     fi
   done
   if [[ -z $pm ]]; then
     err "could not determine package manager"
-    exit 1
   fi
 }
 
 grok_system() {
+  pkgs=()
   case $pm in
-    yum)      pmi="$pm install -y";     osfam=redhat; pkgs="${yums[@]}"    ;;
-    apt-get)  pmi="$pm install -y";     osfam=debian; pkgs="${apts[@]}"    ;;
-    pacman)   pmi="$pm -S --noconfirm"; osfam=arch;   pkgs="${pacmans[@]}" ;;
-    zypper)   pmi="$pm install -n";     osfam=suse;   pkgs="${zyppers[@]}" ;;
-    pkg)      pmi="$pm install";        osfam=bsd;    pkgs="${pkgngs[@]}"  ;;
-    brew)     pmi="$pm install";        osfam=mac;    pkgs="${brews[@]}"   ;;
+    yum)      pmi="$pm install -y";     osfam=redhat; pkgs=(${yums[@]})    ;;
+    apt-get)  pmi="$pm install -y";     osfam=debian; pkgs=(${apts[@]})    ;;
+    pacman)   pmi="$pm -S --noconfirm"; osfam=arch;   pkgs=(${pacmans[@]}) ;;
+    zypper)   pmi="$pm install -n";     osfam=suse;   pkgs=(${zyppers[@]}) ;;
+    pkg)      pmi="$pm install";        osfam=bsd;    pkgs=(${pkgngs[@]})  ;;
+    brew)     pmi="$pm install";        osfam=mac;    pkgs=(${brews[@]})   ;;
   esac
+  echo -e "\n\nOS Family: $osfam\tPackage Mgr: $pm\n"
+  [[ $has_sudo == True ]] && pmi="sudo $pmi"
 }
 
 set_up_os_specials() {  # aka homebrew
-  if [[ osfam == mac ]]; then
+  if [[ $osfam == mac ]]; then
+    echo -e "\nEnabling Homebrew"
     ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
     # FIXME: more to do here, I'm sure
-  elif [[ osfam == bsd ]]; then
+  elif [[ $osfam == bsd ]]; then
     #echo "ENABLE: X11 setup by adding this line to ~/.pcdmsessionstart"
-    echo -e "\n./.xinitrc" >> ~/.xprofile
+    echo -e "\nEnabling use of .xinitrc"
+    echo -e "\n./.xinitrc" >> $HOME/.xprofile
     # Set up pkgng?
-  elif [[ osfam == redhat ]]; then
-    # Enable EPEL, but consider that fedora probably doesn't need this
-    wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-    sudo rpm -Uvh epel-release-*.rpm
+  elif [[ $osfam == redhat ]]; then
+    # consider that fedora probably doesn't need extra repos
+    if grep -qiv fedora /etc/*release*; then
+      echo -e "\nEnabling EPEL repository"
+      wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+      sudo rpm -Uvh epel-release-*.rpm
+    fi
+  elif [[ $osfam == arch ]]; then
+    echo -e "\nEnabling yaourt/AUR"
+    # FIXME
   fi
 }
 
 check_for_installed_pkgs() {
   missings=()
-  for p in $pkgs; do
-    which $p >/dev/null 2>&1 || missings+=$p
+  #for p in ${pkgs[@]}; do
+  for c in ${cmds[@]}; do
+    #which $c >/dev/null 2>&1 || missings+=" $c"
+    #whereis $c |cut -f2 -d' ' >/dev/null 2>&1 
+    which $c >/dev/null 2>&1 || missings=( ${missings[@]} $c )
   done
   if [[ ${#missings} != 0 ]]; then
-    echo -e "Missing the following essential packages:"
-    for m in $missings; do echo "  $m"; done
+    echo -e "\nMissing the following essential commands:"
+    for m in ${missings[@]}; do echo "  $m"; done
     echo -e "\nI'll try installing them for you shortly.\n"
   fi
 }
 
 install_prelims() {
-  if ! $pmi zsh wget; then
+  #if ! ls; then
+  if ! eval $pmi zsh wget which; then
     err "unable to install preliminary packages (zsh, wget) so cannot proceed."
   fi
 }
 
 prompt_for_info() {
-  [[ -z $C4R_USER ]] &&
-    read -p 'New local system username (leave blank to skip creation): ' user
-  newuser='EXISTING'
-  if [[ -z $user ]]; then
-    user=$USER
+  echo
+  if [[ -z $C4R_USER ]]; then
+    [[ $has_root == False ]] && append=" (leave blank to skip creation)"
+    read -p "New local system username$append: " user
+  fi
+  if [[ -n $user ]]; then
     newuser='NEW'
-    #read -p 'New passwd: ' user
-    #echo $passwd |passwd $user
-    passwd $user
+  else
+    user=$USER
+    newuser='EXISTING'
   fi
   echo -e "Setting up for $newuser user: $user\n"
   [[ -z $GH_USER ]] &&
     read -p 'GitHub username: ' ghuser
-  if wget -s https://github.com/$ghuser/dotfiles; then
+  dummy=https://raw.github.com/$ghuser/dotfiles/master/config/zsh/functions/foo
+  echo "Checking for existence of your forked dotfiles repo on GitHub..."
+  if wget -q $dummy; then
     echo "Cool, looks like you've already forked your dotfiles repo."
   else
     #echo "Oops. You need to fork this dotfiles repo on github.com:"
@@ -123,41 +169,73 @@ prompt_for_info() {
     #echo "(and then re-run this)"
     #echo -e "\nInstructions: https://github.com/help/forking"
     err "Oops. You need to fork this dotfiles repo on github.com:\n" \
-        "  https://github.com/code4real/dotfiles\n" \
-        "(and then re-run this)\n" \
-        "\nInstructions: https://github.com/help/forking\n"  # FIXME
+        " https://github.com/code4real/dotfiles\n" \
+        " (and then re-run this)\n" \
+        "\nInstructions: https://help.github.com/articles/fork-a-repo\n"
   fi
 }
 
+set_passwd() {
+  echo
+  # CentOS has no passwd!
+  #passwd $user
+  # FIXME: require min 5 chars
+  read -p 'New user passwd: ' passwd  # Should ask twice
+  echo $user:$passwd |chpasswd $user
+}
+
 create_user() {
-  wzsh=$(whereis zsh |cut -f2 -d' ')
-  case $pm in
-    pacman|yum|apt-get|zypper)
-      useradd    -m -s $wzsh $user ;;
-    pkg)
-      pw useradd -m -s $wzsh $user ;;
-    brew)
-      wget https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh
-      bash ./useradd-mac.sh 
-      ;;
-  esac
+  if [[ $newuser == NEW ]]; then
+    wzsh=$(whereis zsh |cut -f2 -d' ')
+    case $pm in
+      pacman|yum|apt-get|zypper)
+        useradd    -m -s $wzsh $user && set_passwd ;;
+      pkg)
+        pw useradd -m -s $wzsh $user && set_passwd ;;
+      brew)
+        wget https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh
+        bash ./useradd-mac.sh $user $user  # full name bogus
+        ;;
+    esac
+  fi
 }
 
 install_sys_pkgs() {
-  echo -e "About to install the following essential system packages:"
-  for p in $pkgs; do echo $p; done
-  $pmi ${pkgs[@]}
+  echo -e "\nAbout to install the following essential system packages:"
+  for p in ${pkgs[@]}; do echo "  $p"; done
+  eval $pmi ${pkgs[@]}
   read -p 'Do you want to install the recommended X11 packages? [Y/n]: ' -n1 x11s
-  $pmi ${xpkgs[@]}
+  echo
+  [[ $x11s != 'n' ]] && eval $pmi ${xpkgs[@]}
 }
 
 #---------------------------------------------------------------------
 # Luser
 
+switch_to_luser() {
+  if [[ $has_root == True ]]; then
+    echo -e "\nSwitching you to act as normal user $user now"
+    su $user
+  fi
+}
+
+generate_keys() {
+  if [[ ! -f ~/.ssh/id_rsa.pub ]]; then
+    echo -e "\nGenerating new ssh key using user password"
+    ssh-keygen -N $passwd -f ~/.ssh/id_rsa
+  fi
+  # FIXME: or maybe use github api to set this for user
+  echo -e "\nFollow these instructions to add this machine to your github profile:"
+  echo "  % \$BROWSER http://... "
+  echo -e "\nPaste the following text as your key (already on your clipboard):"
+  cat ~/.ssh/id_rsa.pub
+  cat ~/.ssh/id_rsa.pub | xclip 
+}
+
 install_zsh_syntax() {
   zhi=git://github.com/zsh-users/zsh-syntax-highlighting.git
-  zhi_local=~/local/src/zsh-syntax-highlighting
-  mkdir -p ~/local/src
+  zhi_local=$HOME/local/src/zsh-syntax-highlighting # ~ not working?!
+  mkdir -p $HOME/local/src
   echo -e "\nInstalling zsh syntax highlighting to $zhi_local\n"
   git clone $zhi $zhi_local
   echo -e "\nHighlighting will be auto-enabled/configured by your dotfiles.\n"
@@ -166,11 +244,10 @@ install_zsh_syntax() {
 install_dotfiles() {
   # http://silas.sewell.org/blog/2009/03/08/profile-management-with-git-and-github/
   echo -e "\nInstalling dotfiles\n"
-  cd ~
+  cd $HOME
   # Check for existence of ~/dotfiles before proceeding
   if [[ -d .git ]]; then
-    print "Whoa, you already have a git repo here."
-    exit 1
+    err "Whoa, you already have a git repo here."
   fi
   if [[ ! -d dotfiles ]]; then
     echo -e "\nCloning your git repo"
@@ -179,9 +256,8 @@ install_dotfiles() {
     for resource in dotfiles/.* dotfiles/* ; do
       [[ -e $resource ]] && existing+=$resource
       if (( $resource > 0 )); then
-        echo "You seem to already have resources in your home. rm or mv these:"
-        echo ${resources[@]}
-        exit 1
+        err "You seem to already have resources in your home. rm or mv these:" \
+            "${resources[@]}"
       fi
     done
     mv dotfiles/.* dotfiles/* .
@@ -190,21 +266,23 @@ install_dotfiles() {
 }
 
 install_vim_bundles() {
-  echo "\nInstalling vim bundles\n"
-  git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+  echo -e "\nInstalling vim bundles\n"
+  git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
   vim +BundleInstall +qall
 }
 
 install_orp() {
-  echo "\nInstalling fancy small bitmap font\n"
-  git clone https://github.com/MicahElliott/Orp-Font ~/local/src/Orp-Font
-  cd ~/local/src/Orp-Font
+  echo -e "\nInstalling fancy small bitmap font\n"
+  git clone https://github.com/MicahElliott/Orp-Font $HOME/local/src/Orp-Font
+  cd $HOME/local/src/Orp-Font
   for font in lib/*.bdf; do ./xfont-install.zsh $font; done
 }
 
 install_nvm() {
-  echo -e "\nInstalling Node Version Manager (NVM) to ~/.nvm\n"
-  git clone https://github.com/creationix/nvm.git ~/.nvm
+  # FIXME: $HOME / ~ missing; account/su problem???
+  #   Need su - -i (interactive)?
+  echo -e "\nInstalling Node Version Manager (NVM) to $HOME/.nvm\n"
+  git clone https://github.com/creationix/nvm.git $HOME/.nvm
   echo -e "Installing your first Node\n"
   en-nvm
   node install 0.10
@@ -223,16 +301,22 @@ install_prelims
 prompt_for_info
 create_user
 install_sys_pkgs
-install_reqs
 
-# Lusers
+# Luser
+switch_to_luser
+generate_keys
 install_zsh_syntax
 install_dotfiles
 install_vim_bundles
 install_orp
 install_nvm
 
-echo
-echo 'DONE!'
+export -f switch_to_luser generate_keys
+su - $user <<EOF
+
+echo -e "\nDONE\!"
 echo -e "\nTry out the git proxy now in your path:"
 echo "  % dotfiles status  # or just: dst"
+
+echo -e "\nTry committing a change to your dotfiles and push it."
+echo "  % dotfiles push  # or just: dpu"
