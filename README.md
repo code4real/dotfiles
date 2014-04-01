@@ -1,10 +1,10 @@
 # Code4Real Dotfiles Distribution: reusable and customizable
 
-Configuration and mini-scripts tuned for zsh, vim, urxvt, tmux, repls, etc on
+*Configuration and mini-scripts tuned for zsh, vim, urxvt, tmux, repls, etc on
 various operating system families/distros: bsd, linux, mac. 256-color support
 is featured throughout the stack. Additional setup of X11, fonts, and I3-WM is
 included but optional. Tested on various servers, laptops (including
-Chromebooks), and minimalistic devices like the RaspberryPi.
+Chromebooks), and minimalistic devices like the RaspberryPi.*
 
 **Suited for neophytes and professionals alike.**
 
@@ -48,30 +48,23 @@ Notable features:
 
 * Time-able, tunable, friendly, and fast
 
-* Tested on ArchLinux, Ubuntu, Debian, Fedora, Centos, and PC-BSD/FreeBSD
+* Tested on ArchLinux, Ubuntu, Debian, Fedora, CentOS, PC-BSD/FreeBSD, and Mac
 
 * Integrates with the parallel Code4Real student curriculum and tutorials
-  (coming soon). But great for non-student professionals, too.
+  (coming soon). But great for professionals, too.
 
 * Optional X11/I3 setup with shortcuts for multi-monitor and mouse toggling.
   Various keyboard enhancements: mappings to assign CapsLock, Esc, Alt,
-  tilde/backtick, etc to ergonomically safe positions, faster keyboard repeat
-  rates
-
-Most interesting top-level areas:
-
-* `config/` --  top level control and hierarchy for vim, zsh, tmux, x11, etc
-* `contrib/` -- several small helper scripts not commonly available
-* `bin/` -- your scripts (add your own if not gists)
-* `.*` -- various other config symlinks to files and directories
+  tilde/backtick, etc to ergonomically safe positions, and faster keyboard
+  repeat rates
 
 
 ## Installing prerequisites
 
 A `bootstrap.sh` script can be downloaded:
-[raw.github.com/code4real/dotfiles/master/bootstrap.sh](https://raw.github.com/code4real/dotfiles/master/bootstrap.sh).
+[raw.github.com/code4real/dotfiles/master/bootstrap.sh](https://raw.github.com/code4real/dotfiles/master/contrib/bin/bootstrap.sh).
 Running it (wait, not yet!) will install and configure the required missing
-utilities onto your system. You'll need root privileges to install them. If
+utilities onto your system. You'll need root/sudo privileges to install them. If
 you're a student on a shared system, your instructor may have already done the
 installation (it'll check for that), but everyone should "bootstrap" to
 prepare their personal environment.
@@ -83,28 +76,12 @@ Follow these instructions to have a fully functioning programming environment.
 A `%` prompt is not to be copied/pasted, but indicates that you're logged in
 as yourself. Likewise, a `#` prompt means the root user is active.
 
-1. **Create a new user account** if you don't already have one or just want to
-   try a fresh start. As a root/admin user, run:
+1. Download and run the [bootstrap]() script, which will install some
+   essential packages, clone the repo, and put the dotfiles into place.
 
-        lnx#    useradd -s /usr/bin/zsh       -m    YOUR_USERNAME
-        bsd# pw useradd -s /usr/local/bin/zsh -m -n YOUR_USERNAME
-        # passwd YOUR_USERNAME
+        curl https://raw.github.com/code4real/dotfiles/master/contrib/bin/bootstrap.sh |bash
 
-
-   Or, for mac, download the
-   [useradd script](https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh),
-   and run:
-        mac# ./useradd-mac.sh YOUR_USERNAME YOUR_NEW_PASSWORD
-
-   **OR**, if you're building off your **existing account**, make Zsh your default
-   shell:
-
-        % chsh -s /usr/bin/zsh
-
-   Then **log out** fully from X or reboot.
-
-1. Log in and you'll now be starting Zsh! You'll see a menu prompt to set up
-   an environment. You don't want that, so press `0`.
+   (or just download it with your web browser if you don't yet have `curl`)
 
 1. *(optional for students)* **Enable `sudo`** on your account. Hopefully, it's
    already done; try this:
@@ -114,32 +91,6 @@ as yourself. Likewise, a `#` prompt means the root user is active.
    group.
 
         # usermod -aG wheel YOUR_USERNAME
-
-1. Download the bootstrapping script:
-
-        wget https://raw.github.com/code4real/dotfiles/master/bootstrap.sh
-        (or just download it with your web browser if you don't yet have wget)
-
-1. Run the bootstrapping script to install some essential packages, clone the
-   repo, and put the dotfiles into place.
-
-        bash ./bootstrap.sh
-
-1. Move your own existing config files temporarily into a scratch area for
-   later reference/merging.
-
-        cd ~
-        mkdir ~/tmp
-        mv .bash* .zsh* .vim* ~/tmp/
-
-1. Sign in to [github](http://github.com) and [fork](fork) this repo to make
-   your own which you can modify
-
-1. Clone and set up your new repo.
-
-        git clone git@github.com:YOUR_USERNAME/dotfiles.git ~/.dotfiles.git
-        mv .dotfiles.git/.* .dotfiles.git/* .
-        mv .git .dotfiles.git/
 
 1. Try it out! (lots of `dotfiles` aliases, like `dst`, `dci`, etc)
 
@@ -177,7 +128,9 @@ extended resources are also mentioned.
 
 * [Vim](http://www.vim.org/) -- an IMproved version of Vi, a highly
   configurable text editor built to enable efficient text editing. Vi has been
-  broadly available on nearly every UNIX system for 30+ years.
+  broadly available on nearly every UNIX system for 30+ years. Included are
+  starter skeleton files, syntaxes for various languages, mappings, and much
+  more.
 
 * [Git](http://git-scm.com/) -- a free and open source distributed
   version control system designed to handle everything from small to very
@@ -251,6 +204,42 @@ extended resources are also mentioned.
 
 
 ## Detailed layout
+
+    ├── config .............. top level control hierarchy
+    │   ├── i3 ..............
+    │   ├── misc ............
+    │   ├── tmux ............
+    │   ├── vim .............
+    │   │   ├── colors ......
+    │   │   ├── ftplugin ....
+    │   │   ├── plugin ......
+    │   │   ├── skel ........
+    │   │   └── syntax ......
+    │   ├── x11 .............
+    │   └── zsh .............
+    │       ├── functions ...
+    │       └── prompts .....
+    ├── contrib ............. small helpers not commonly in pkgs
+    │   ├── bin .............
+    │   ├── x11 .............
+    │   └── zsh .............
+    │       ├── functions ...
+    │       └── prompts .....
+    ├── local ...............
+    │   ├── bin .............
+    │   ├── etc .............
+    │   ├── man .............
+    │   └── src .............
+    ├── archive .............
+    ├── art .................
+    ├── bin ................. your scripts (add your own if not gists)
+    ├── doc .................
+    ├── etc .................
+    ├── exp .................
+    ├── lib .................
+    └── proj ................
+
+
 
     *  README.md -- this file
     *  bin       -- small (usually standalone) scripts that I have written

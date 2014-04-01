@@ -23,10 +23,17 @@ WM=i3
 usage() { echo USAGE: bootstrap USERNAME GITHUB_USERNAME; }
 err() { echo -e "\nERROR: $@" 2>&1 ; exit 1; }
 
+get_bootstraps() {
+  urlbase=https://raw.github.com/code4real/dotfiles/master/contrib/bootstrap/
+  uamac=$urlbase/useradd-mac.sh
+  pkgmatrix=$urlbase/pkgmatrix.tsv
+  bsinstall=$urlbase/bootstrap-installpkgs.zsh
+  bscreate=$urlbase/bootstrap-createuser.zsh
+  bsuser=$urlbase/bootstrap-setupuser.zsh
+}
+
 set_targets() {
-  # FIXME: suggest other good packages to install:
-  # firefox
-  # FIXME: set some things inside configs (envars.zsh, .Xdefaults) browser
+  # FIXME: instead read pkgs/cmds from config/misc/pkgmatrix.tsv
   common=( zsh gawk rxvt-unicode tmux tree )
   #common=( zsh:zsh gawk:gawk rxvt-unicode:urxvt tmux:tmux tree:tree )
   xpkgs=(  # hopefully these are common across systems
@@ -38,12 +45,13 @@ set_targets() {
   #pkgngs=(  ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
   #brews=(   ${common[@]} git:git vim:vim tree:tree rubygem-coderay:coderay )
   yums=(    ${common[@]} git vim tree rubygem-coderay )
-  apts=(    ${common[@]} git vim tree rubygem-coderay )
-  pacmans=( ${common[@]} git vim tree rubygem-coderay )
-  zyppers=( ${common[@]} git vim tree rubygem-coderay )
-  pkgngs=(  ${common[@]} git vim tree rubygem-coderay )
-  brews=(   ${common[@]} git vim tree rubygem-coderay )
-  cmds=( git vim tree coderay )
+  apts=(    ${common[@]} git vim rlwrap tree rubygem-coderay )
+  pacmans=( ${common[@]} git vim rlwrap tree rubygem-coderay )
+  zyppers=( ${common[@]} git vim rlwrap tree rubygem-coderay )
+  pkgngs=(  ${common[@]} git vim rlwrap tree rubygem-coderay )
+  brews=(   ${common[@]} git vim rlwrap tree rubygem-coderay )
+  # Need to check cmds (pkgs impossible) since we don't want reinstalls
+  cmds=( git vim tree coderay rlwrap )
   xcmds=( xclip arandr bdftopcf gol gvolwheel parcellite )
 }
 
@@ -51,13 +59,13 @@ set_targets() {
 check_privs() {
   touch /tmp/foo
   cmd="chown root.root /tmp/foo > /dev/null"
-  rm /tmp/foo
   has_sudo=False has_root=False
   #if ! sudo ls >/dev/null; then
   #if ! chown root.root /tmp/foo >/dev/null; then
   if eval $cmd; then
     echo -e "\nOh wow, you're root. Proceeding..."
     has_root=True
+    rm /tmp/foo
     sudo() { eval $@; }
   elif sudo eval $cmd; then
     # Or just whoami??
@@ -96,16 +104,18 @@ grok_system() {
     pkg)      pmi="$pm install";        osfam=bsd;    pkgs=(${pkgngs[@]})  ;;
     brew)     pmi="$pm install";        osfam=mac;    pkgs=(${brews[@]})   ;;
   esac
-  echo -e "\nOS Family: $osfam\nPackage Mgr: $pm\n"
+  echo -e "\nOS Fam : $osfam\nPkg Mgr: $pm\n"
   [[ $has_sudo == True ]] && pmi="sudo $pmi"
 }
 
 set_up_os_specials() {  # aka homebrew
   if [[ $osfam == mac ]]; then
+    # FIXME: Ugh, will need 2GB of xcode
     echo -e "\nEnabling Homebrew"
     ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
     # FIXME: more to do here, I'm sure
   elif [[ $osfam == bsd ]]; then
+    # FIXME: should be part of user setup
     #echo "ENABLE: X11 setup by adding this line to ~/.pcdmsessionstart"
     echo -e "\nEnabling use of .xinitrc"
     echo -e "\n./.xinitrc" >> $HOME/.xprofile
@@ -113,7 +123,7 @@ set_up_os_specials() {  # aka homebrew
   elif [[ $osfam == redhat ]]; then
     # consider that fedora probably doesn't need extra repos
     if grep -qiv fedora /etc/*release*; then
-      echo -e "\nEnabling EPEL repository"
+      echo -e "Enabling EPEL repository"
       wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
       sudo rpm -Uvh epel-release-*.rpm
     fi
@@ -139,13 +149,36 @@ check_for_installed_pkgs() {
 }
 
 install_prelims() {
-  #if ! ls; then
-  if ! eval $pmi zsh wget which; then
-    err "unable to install preliminary packages (zsh, wget) so cannot proceed."
+  # Should be the same basic packages on every system
+  prelims=(zsh wget curl which passwd)
+  if ! eval $pmi ${prelims[@]}; then
+    err "unable to install preliminary packages (${prelims[@]}) so cannot proceed."
   fi
 }
 
-prompt_for_info() {
+install_sys_pkgs() {
+  echo -e "\nAbout to install the following essential system packages:"
+  for p in ${pkgs[@]}; do echo "  $p"; done
+  echo
+  eval $pmi ${pkgs[@]}
+  echo
+  read -p "Do you want to install the recommended X11 packages? [Y/n]: " -n1 x11s
+  echo
+  [[ $x11s != 'n' ]] && eval $pmi ${xpkgs[@]}
+}
+
+#---------------------------------------------------------------------
+# USERADD
+# Section so small that won't bother putting into separate script, for now.
+# Will eventually want to enable bulk creation of users via tsv.
+
+# Could be running as sysadmin, existing user with sudo, or luser
+# Several types of use cases:
+# - sysadmin (root) setting up for brand-new student(s)
+# - sysadmin (root) for new self
+# - existing (luser) for existing
+# - existing (luser) for new self
+get_user_info() {
   echo
   if [[ -z $C4R_USER ]]; then
     [[ $has_root == False ]] && append=" (leave blank to skip creation)"
@@ -158,61 +191,67 @@ prompt_for_info() {
     newuser='EXISTING'
   fi
   echo -e "Setting up for $newuser user: $user\n"
-  [[ -z $GH_USER ]] &&
-    read -p 'GitHub username: ' GH_USER ||
-    echo "Using $GH_USER as GitHub username"
-  export GH_USER
-  dummy=https://raw.github.com/$GH_USER/dotfiles/master/config/zsh/functions/foo
-  echo "Checking for existence of your forked dotfiles repo on GitHub..."
-  if wget -q $dummy; then
-    rm foo
-    echo "Cool, looks like you've already forked your dotfiles repo."
-  else
-    #echo "Oops. You need to fork this dotfiles repo on github.com:"
-    #echo "  https://github.com/code4real/dotfiles"
-    #echo "(and then re-run this)"
-    #echo -e "\nInstructions: https://github.com/help/forking"
-    err "Oops. You need to fork this dotfiles repo on github.com:\n" \
-        " https://github.com/code4real/dotfiles\n" \
-        " (and then re-run this)\n" \
-        "\nInstructions: https://help.github.com/articles/fork-a-repo\n"
-  fi
 }
 
 set_passwd() {
   echo
-  # CentOS has no passwd!
-  #passwd $user
-  # FIXME: require min 5 chars
-  read -p 'New user passwd: ' passwd  # Should ask twice
-  echo $user:$passwd |chpasswd $user
+  # CentOS has no passwd (but can install)!
+  passwd $user
+  #read -p 'New user passwd: ' passwd  # Should ask twice
+  #echo $user:$passwd |chpasswd $user
 }
 
 create_user() {
+  # FIXME: should work off list of new users for bulk creation
+  wzsh=$(whereis zsh |cut -f2 -d' ')
   if [[ $newuser == NEW ]] && grep -vq "\b$user\b" /etc/passwd; then
-    wzsh=$(whereis zsh |cut -f2 -d' ')
     case $pm in
       pacman|yum|apt-get|zypper)
         useradd    -m -s $wzsh $user && set_passwd ;;
       pkg)
         pw useradd -m -s $wzsh $user && set_passwd ;;
       brew)
-        wget https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh
+        #wget https://raw.github.com/code4real/dotfiles/master/contrib/bin/useradd-mac.sh
+        wget $uamac
         bash ./useradd-mac.sh $user $user  # full name bogus
         ;;
     esac
+  else
+    chsh -s $wzsh $user
   fi
 }
 
-install_sys_pkgs() {
-  echo -e "\nAbout to install the following essential system packages:"
-  for p in ${pkgs[@]}; do echo "  $p"; done
-  eval $pmi ${pkgs[@]}
-  read -p 'Do you want to install the recommended X11 packages? [Y/n]: ' -n1 x11s
-  echo
-  [[ $x11s != 'n' ]] && eval $pmi ${xpkgs[@]}
+#---------------------------------------------------------------------
+
+# FIXME: might not work since want new user env
+export -f err
+
+bootstrap_installpkgs() {
+  :
 }
 
+bootstrap_createuser() {
+  bscu=bootstrap-createuser.zsh
+  wget $bscreate -O /tmp/bootstrap-createuser.zsh
+  bscreate=$urlbase/bootstrap-createuser.zsh
+  chmod +x /tmp/bootstrap-createuser.zsh
+  su -c "zsh /tmp/bootstrap-createuser.zsh" -l $user
+}
+
+bootstrap_setupuser() {
+  wget $bsuser -O /tmp/bootstrap-setupuser.zsh
+  chmod +x /tmp/bootstrap-setupuser.zsh
+  su -c "zsh /tmp/bootstrap-setupuser.zsh" -l $user
+}
+
+rm_bootstraps() {
+  echo -e "\nRemoving bootstrap helper scripts"
+  rm bootstrap-*
+}
+
+#---------------------------------------------------------------------
+
+get_bootstraps
 set_targets
 check_privs
 find_pkg_mgr
@@ -220,16 +259,20 @@ grok_system
 set_up_os_specials
 check_for_installed_pkgs
 install_prelims
-prompt_for_info
-create_user
 install_sys_pkgs
 
-bsuser=https://raw.github.com/code4real/dotfiles/master/contrib/bin/bootstrap-user.zsh
-wget $bsuser -O /tmp/bootstrap-user.zsh
-chmod +x /tmp/bootstrap-user.zsh
-su -c "/tmp/bootstrap-user.zsh $passwd $GH_USER" - $user
+# FIXME: put into separate user-creation bootstrap; will enable multi-user
+#        bulk creation
+get_user_info
+create_user
 
-echo -e "\nDONE\!"
+#bootstrap_installpkgs
+#bootstrap_createuser
+bootstrap_setupuser
+
+rm_bootstraps
+
+echo -e "\nDONE!"
 echo -e "\nTry out the git proxy now in your path:"
 echo "  % dotfiles status  # or just: dst"
 

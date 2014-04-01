@@ -35,8 +35,8 @@ zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit; compinit
 
-print "ENABLE: install fonts (maybe orp) in set in ~/.Xdefaults"
-print "https://github.com/MicahElliott/Orp-Font\n"
+#print "ENABLE: install fonts (maybe orp) in set in ~/.Xdefaults"
+#print "https://github.com/MicahElliott/Orp-Font\n"
 
 ## Help system
 # According to:
@@ -59,10 +59,10 @@ bindkey "^[H" run-help
 # Arch zsh packages.
 # https://github.com/zsh-users/zsh-syntax-highlighting/tree/master/highlighters
 # Options:
-print "ENABLE: zsh syntax highlighting"
-print "https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/highlighters/main/main-highlighter.zsh\n"
+#print "ENABLE: zsh syntax highlighting"
+#print "https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/highlighters/main/main-highlighter.zsh\n"
 #source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/local/src/zsh-syntax-highlighting.zsh
+source ~/local/src/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_HIGHLIGHTERS=( main brackets pattern )
 # Hmm, just basic colors? rgybmc
 #ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=cyan

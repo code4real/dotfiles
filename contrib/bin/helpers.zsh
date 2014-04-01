@@ -3,6 +3,8 @@
 # Ex:
 # . helpers.zsh
 
+# Probably should not be used by .zshrc since leaks globals.
+
 autoload -Uz colors; colors
 
 
@@ -42,7 +44,10 @@ requires() {
 }
 
 ### Platform
+# Gets really messy at the point of determining various Linux distros that
+# only specify in /etc/(os|foo)-release
 os=$(uname -o)
+
 if [[ $os == Linux ]]; then
   print ""
   my_os=linux

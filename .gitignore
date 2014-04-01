@@ -20,6 +20,7 @@
 /archive
 /VirtualBox VMs
 /src
+/tmp
 
 # Specific files
 tags
