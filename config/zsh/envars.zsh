@@ -50,7 +50,7 @@ export READNULLCMD=less
 
 export EMAIL=$my_email
 export REPLYTO=$EMAIL
-export HGUSER="$my_fullname ($(hostname -s)) <$my_email>"
+export HGUSER="$my_fullname ($(hostname)) <$my_email>"
 export HGMERGE=vimdiff
 export HGEDITOR=hgeditor
 export INPUTRC=~/.inputrc

@@ -54,7 +54,7 @@ done
 unset f
 
 # Site-specific
-_siterc="$my_shdir/$(hostname -s).sh"
+_siterc="$my_shdir/$(hostname).sh"
 [[ -f $_siterc ]] && . $_siterc || :
 unset _siterc
 
